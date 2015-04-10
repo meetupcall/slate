@@ -83,11 +83,11 @@
 <h1 id="authentication">Authentication</h1>
 
 <blockquote>
-<p>To authorize, use this code:</p>
+<p>To authenticate, use this code:</p>
 </blockquote>
 <pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 </code></pre>
-<pre><code class="highlight shell"><span class="c"># With cURL, you can just pass the correct header with each request</span>
+<pre><code class="highlight shell"><span class="c"># With Curl, you can just pass the correct header with each request</span>
 curl <span class="s2">"api_endpoint_here"</span>
   -H <span class="s2">"x-api-key: pretend_api_key"</span>
 </code></pre>
@@ -108,6 +108,105 @@ You must replace `pretend_api_key` with your personal API key.
 
 <h1 id="signups">Signups</h1>
 
+<h2 id="create-a-signup">Create a Signup</h2>
+<pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
+
+<span class="n">client</span><span class="p">.</span><span class="nf">create</span><span class="p">({</span>
+  <span class="ss">email: </span><span class="s1">'john.smith@gmail.com'</span><span class="p">,</span>
+  <span class="ss">first_name: </span><span class="s1">'John'</span><span class="p">,</span>
+  <span class="ss">last_name: </span><span class="s1">'Smith'</span><span class="p">,</span>
+  <span class="ss">account_name: </span><span class="s1">'ACME Corp'</span><span class="p">,</span>
+  <span class="ss">billing_street: </span><span class="s1">'29 Acacia Road'</span><span class="p">,</span>
+  <span class="ss">billing_city: </span><span class="s1">'London'</span><span class="p">,</span>
+  <span class="ss">billing_postal_code: </span><span class="s1">'SW19 5AG'</span><span class="p">,</span>
+  <span class="ss">billing_country: </span><span class="s1">'GB'</span><span class="p">}</span>
+</code></pre>
+<pre><code class="highlight shell">curl --data <span class="s1">'{"email" : "john.smith@gmail.com", "first_name" : "John", "last_name" : "Smith", "account_name" : "ACME Corp", "billing_street" : "29 Acacia Road", "billing_city" : "London", "billing_postal_code" : "SW19 5AG", "billing_country":"GB"}'</span> https://manage.meetupcall.com/api/v1/signups --header <span class="s2">"x-api-key: pretend_api_key"</span>  --header <span class="s2">"Accept:application/json"</span> --header <span class="s2">"Content-Type:application/json"</span>
+</code></pre>
+
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/TCL6LGVJHZc"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+
+<p>This endpoint automates the entire Meetupcall signup process and upon success returns a <code class="prettyprint">login_url</code> you can use to authenticate and log into Meetupcall without entering a password.</p>
+
+<p>It will also send the new User a &lsquo;Welcome Email&rsquo; asking them to activate their account and choose a new password.</p>
+
+<h3 id="http-request">HTTP Request</h3>
+
+<p><code class="prettyprint">POST https://manage.meetupcall.com/api/v1/signups</code></p>
+
+<h3 id="body-parameters">Body Parameters</h3>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required?</th>
+<th>Notes</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>email</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>first_name</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>last_name</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>account_name</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>billing_street</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>billing_city</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>billing_postal_code</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>billing_country</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>phone</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>billing_state</td>
+<td>No</td>
+<td></td>
+</tr>
+<tr>
+<td>timezone</td>
+<td>No</td>
+<td>Default: London</td>
+</tr>
+</tbody></table>
+
 <h2 id="get-all-signups">Get all Signups</h2>
 <pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 <span class="n">client</span><span class="p">.</span><span class="nf">index</span>
@@ -122,19 +221,19 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
 <pre><code class="highlight json"><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">  
      </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"john.smith@gmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"http://localhost:3000/login/ACL6LGVJHZc"</span><span class="w">
+     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/ACL6LGVJHZc"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="p">{</span><span class="w">  
      </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"johnny.appleseed@gmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"http://localhost:3000/login/6rXvEY6wVbU"</span><span class="w">
+     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/6rXvEY6wVbU"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="p">{</span><span class="w">  
      </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"bob.jones@outlook.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"http://localhost:3000/login/MgsrsRZtQeQ"</span><span class="w">
+     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/MgsrsRZtQeQ"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="p">{</span><span class="w">  
      </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"jane.doe@hotmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"http://localhost:3000/login/f2AykXcRwuM"</span><span class="w">
+     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/f2AykXcRwuM"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
@@ -166,18 +265,20 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
 
 <h3 id="http-request">HTTP Request</h3>
 
-<p><code class="prettyprint">GET https://manage.meetupcall.com/avpi/v1/&lt;EMAIL&gt;</code></p>
+<p><code class="prettyprint">GET https://manage.meetupcall.com/avpi/v1/signups/&lt;email&gt;</code></p>
 
 <h3 id="url-parameters">URL Parameters</h3>
 
 <table><thead>
 <tr>
 <th>Parameter</th>
-<th>Description</th>
+<th>Required?</th>
+<th>Notes</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>EMAIL</td>
+<td>email</td>
+<td>Yes</td>
 <td>The email address of the signup to retrieve</td>
 </tr>
 </tbody></table>
