@@ -4,11 +4,9 @@ title: API Reference
 language_tabs:
   - shell
   - ruby
-  - python
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='mailto:simon.moxon@meetupcall.com'>Request an API Key</a>
 
 includes:
   - errors
@@ -18,151 +16,141 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+```ruby
+# A Ruby/Rails client can use a simple class like this to consume our API:
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+class SignupClient
+  include HTTParty
+  base_uri 'https://manage.meetupcall.com/api/v1'
+  format :json
 
-This example API documentation page was created with [Slate](http://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+  def initialize(api_key)
+    @options = { :headers => {
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'x-api-key' => api_key }
+               }
+  end
+
+  def create(params)
+    self.class.post '/signups', @options.merge(body: params.to_json)
+  end
+
+  def index
+    self.class.get '/signups', @options
+  end
+
+  def get(email)
+    self.class.get "/signups/#{email}", @options
+  end
+end
+```
+
+Welcome to alpha version Meetupcall V1 API. You can use our API to access Meetupcall API endpoints, which are currently limited to automating the customer sign-up process.
+
+We have language examples in Curl (shell) and Ruby. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right. The API attempts to follow RESTful principles so using it from other languages shouldn't be a problem.
+
+If you want to try these APIs out in an interactive manner you should use our [Browser Test Harness](https://manage.meetupcall.com/api/v1/docs).
 
 # Authentication
 
 > To authorize, use this code:
 
 ```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
+client = SignupClient.new('pretend_api_key')
 ```
 
 ```shell
-# With shell, you can just pass the correct header with each request
+# With cURL, you can just pass the correct header with each request
 curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
+  -H "x-api-key: pretend_api_key"
 ```
 
-> Make sure to replace `meowmeowmeow` with your API key.
+> Make sure to replace `pretend_api_key` with your API key.
 
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
+Meetupcall uses API keys to allow access to the API. You can request an API key by contacting us via email on the link to the left.
 
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
+Meetupcall expects for the API key to be included in all API requests to the server in a header that looks like the following:
 
-`Authorization: meowmeowmeow`
+`x-api-key: pretend_api_key`
 
 <aside class="notice">
-You must replace `meowmeowmeow` with your personal API key.
+You must replace `pretend_api_key` with your personal API key.
 </aside>
 
-# Kittens
+# Signups
 
-## Get All Kittens
+## Get all Signups
 
 ```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
+client = SignupClient.new('pretend_api_key')
+client.index
 ```
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+# With curl, this example shows use of the Accept header, which you can modify to return JSON or XML.
+curl https://manage.meetupcall.com/api/v1/signups -H "x-api-key: pretend_api_key"  -H "Accept:application/json"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+  {  
+     "email":"john.smith@gmail.com",
+     "login_url":"http://localhost:3000/login/ACL6LGVJHZc"
   },
-  {
-    "id": 2,
-    "name": "Isis",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
+  {  
+     "email":"johnny.appleseed@gmail.com",
+     "login_url":"http://localhost:3000/login/6rXvEY6wVbU"
+  },
+  {  
+     "email":"bob.jones@outlook.com",
+     "login_url":"http://localhost:3000/login/MgsrsRZtQeQ"
+  },
+  {  
+     "email":"jane.doe@hotmail.com",
+     "login_url":"http://localhost:3000/login/f2AykXcRwuM"
   }
 ]
 ```
 
-This endpoint retrieves all kittens.
+This endpoint retrieves a collection of the email addresses and login_urls of all Signups previously created through API with your key.
 
 ### HTTP Request
 
-`GET http://example.com/kittens`
+`GET https://manage.meetupcall.com/api/v1/signups`
 
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
+## Get a Specific Signup
 
 ```ruby
-require 'kittn'
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
+client = SignupClient.new('pretend_api_key')
+client.get('john.smith@gmail.com')
 ```
 
 ```shell
-curl "http://example.com/api/kittens/3"
-  -H "Authorization: meowmeowmeow"
+curl https://manage.meetupcall.com/api/v1/signups/john.smith@gmail.com -H "x-api-key: pretend_api_key"  -H "Accept:application/json"
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Isis",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "success": true,
+  "login_url":"https://manage.meetupcall.com/login/TCL6LGVJHZc"
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">If you're not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
+This endpoint retrieves a specific Signup.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://manage.meetupcall.com/avpi/v1/<EMAIL>`
 
 ### URL Parameters
 
 Parameter | Description
 --------- | -----------
-ID | The ID of the cat to retrieve
+EMAIL | The email address of the signup to retrieve
 
