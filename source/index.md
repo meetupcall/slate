@@ -54,14 +54,14 @@ If you want to try these APIs out in an interactive manner you should use our [B
 
 # Authentication
 
-> To authorize, use this code:
+> To authenticate, use this code:
 
 ```ruby
 client = SignupClient.new('pretend_api_key')
 ```
 
 ```shell
-# With cURL, you can just pass the correct header with each request
+# With Curl, you can just pass the correct header with each request
 curl "api_endpoint_here"
   -H "x-api-key: pretend_api_key"
 ```
@@ -79,6 +79,59 @@ You must replace `pretend_api_key` with your personal API key.
 </aside>
 
 # Signups
+
+## Create a Signup
+
+```ruby
+client = SignupClient.new('pretend_api_key')
+
+client.create({
+  email: 'john.smith@gmail.com',
+  first_name: 'John',
+  last_name: 'Smith',
+  account_name: 'ACME Corp',
+  billing_street: '29 Acacia Road',
+  billing_city: 'London',
+  billing_postal_code: 'SW19 5AG',
+  billing_country: 'GB'}
+```
+
+```shell
+curl --data '{"email" : "john.smith@gmail.com", "first_name" : "John", "last_name" : "Smith", "account_name" : "ACME Corp", "billing_street" : "29 Acacia Road", "billing_city" : "London", "billing_postal_code" : "SW19 5AG", "billing_country":"GB"}' https://manage.meetupcall.com/api/v1/signups --header "x-api-key: pretend_api_key"  --header "Accept:application/json" --header "Content-Type:application/json"
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "success": true,
+  "login_url":"https://manage.meetupcall.com/login/TCL6LGVJHZc"
+}
+```
+
+This endpoint automates the entire Meetupcall signup process and upon success returns a `login_url` you can use to authenticate and log into Meetupcall without entering a password.
+
+It will also send the new User a 'Welcome Email' asking them to activate their account and choose a new password.
+
+### HTTP Request
+
+`POST https://manage.meetupcall.com/api/v1/signups`
+
+### Body Parameters
+
+Parameter | Required?   | Notes
+--------- | ----------- | -----
+email | Yes
+first_name | Yes |
+last_name  | Yes |
+account_name | Yes |
+billing_street | Yes |
+billing_city | Yes |
+billing_postal_code | Yes |
+billing_country | Yes |
+phone | No |
+billing_state | No |
+timezone | No | Default: London
 
 ## Get all Signups
 
@@ -98,19 +151,19 @@ curl https://manage.meetupcall.com/api/v1/signups -H "x-api-key: pretend_api_key
 [
   {  
      "email":"john.smith@gmail.com",
-     "login_url":"http://localhost:3000/login/ACL6LGVJHZc"
+     "login_url":"https://manage.meetupcall.com/login/ACL6LGVJHZc"
   },
   {  
      "email":"johnny.appleseed@gmail.com",
-     "login_url":"http://localhost:3000/login/6rXvEY6wVbU"
+     "login_url":"https://manage.meetupcall.com/login/6rXvEY6wVbU"
   },
   {  
      "email":"bob.jones@outlook.com",
-     "login_url":"http://localhost:3000/login/MgsrsRZtQeQ"
+     "login_url":"https://manage.meetupcall.com/login/MgsrsRZtQeQ"
   },
   {  
      "email":"jane.doe@hotmail.com",
-     "login_url":"http://localhost:3000/login/f2AykXcRwuM"
+     "login_url":"https://manage.meetupcall.com/login/f2AykXcRwuM"
   }
 ]
 ```
@@ -146,11 +199,11 @@ This endpoint retrieves a specific Signup.
 
 ### HTTP Request
 
-`GET https://manage.meetupcall.com/avpi/v1/<EMAIL>`
+`GET https://manage.meetupcall.com/avpi/v1/signups/<email>`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-EMAIL | The email address of the signup to retrieve
+Parameter | Required? |Notes
+--------- | --------- |-----
+email | Yes |The email address of the signup to retrieve
 
