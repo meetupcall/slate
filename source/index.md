@@ -168,7 +168,7 @@ curl https://manage.meetupcall.com/api/v1/signups -H "x-api-key: pretend_api_key
 ]
 ```
 
-This endpoint retrieves a collection of the email addresses and login_urls of all Signups previously created through API with your key.
+This endpoint retrieves a collection of the email addresses and login_urls of all Signups previously created through the API with your key.
 
 ### HTTP Request
 
@@ -195,7 +195,7 @@ curl https://manage.meetupcall.com/api/v1/signups/john.smith@gmail.com -H "x-api
 }
 ```
 
-This endpoint retrieves a specific Signup.
+This endpoint retrieves a specific Signup previously created through the API with your key.
 
 ### HTTP Request
 
