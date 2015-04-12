@@ -4,6 +4,7 @@ title: API Reference
 language_tabs:
   - shell
   - ruby
+  - csharp
 
 toc_footers:
   - <a href='mailto:simon.moxon@meetupcall.com'>Request an API Key</a>
@@ -46,6 +47,12 @@ class SignupClient
 end
 ```
 
+```csharp
+
+// C#, VB.NET or other .NET clients can use our client library available at https://github.com/meetupcall/meetupcall-api-dotnet
+
+```
+
 Welcome to alpha version Meetupcall V1 API. You can use our API to access Meetupcall API endpoints, which are currently limited to automating the customer sign-up process.
 
 We have language examples in Curl (shell) and Ruby. You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right. The API attempts to follow RESTful principles so using it from other languages shouldn't be a problem.
@@ -55,6 +62,10 @@ If you want to try these APIs out in an interactive manner you should use our [B
 # Authentication
 
 > To authenticate, use this code:
+
+```csharp
+var client = new SignupClient("pretend_api_key");
+```
 
 ```ruby
 client = SignupClient.new('pretend_api_key')
@@ -82,6 +93,21 @@ You must replace `pretend_api_key` with your personal API key.
 
 ## Create a Signup
 
+```csharp
+var request = new SignupRequest {
+  email = "john.smith@gmail.com",
+  first_name = "John",
+  last_name = "Smith",
+  account_name = "Acme Corp",
+  billing_street = "29 Acacia Road",
+  billing_city = "London",
+  billing_postal_code = "SW19 5AG",
+  billing_country = "GB"
+};
+
+var new_signup = client.Create(request);
+```
+
 ```ruby
 client = SignupClient.new('pretend_api_key')
 
@@ -104,8 +130,14 @@ curl --data '{"email" : "john.smith@gmail.com", "first_name" : "John", "last_nam
 
 ```json
 {
-  "success": true,
-  "login_url":"https://manage.meetupcall.com/login/TCL6LGVJHZc"
+  "status": {
+    "code": 200,
+    "description": "Success."
+  },
+  "data": {
+    "email": "john.smith@gmail.com",
+    "login_url": "https://manage.meetupcall.com/login/g45G3fLe-to"
+  }
 }
 ```
 
@@ -135,6 +167,11 @@ timezone | No | Default: London
 
 ## Get all Signups
 
+```csharp
+client = SignupClient.new("pretend_api_key")
+client.Index();
+```
+
 ```ruby
 client = SignupClient.new('pretend_api_key')
 client.index
@@ -148,24 +185,26 @@ curl https://manage.meetupcall.com/api/v1/signups -H "x-api-key: pretend_api_key
 > The above command returns JSON structured like this:
 
 ```json
-[
-  {  
-     "email":"john.smith@gmail.com",
-     "login_url":"https://manage.meetupcall.com/login/ACL6LGVJHZc"
+{
+  "status": {
+    "code": 200,
+    "description": "Success."
   },
-  {  
-     "email":"johnny.appleseed@gmail.com",
-     "login_url":"https://manage.meetupcall.com/login/6rXvEY6wVbU"
-  },
-  {  
-     "email":"bob.jones@outlook.com",
-     "login_url":"https://manage.meetupcall.com/login/MgsrsRZtQeQ"
-  },
-  {  
-     "email":"jane.doe@hotmail.com",
-     "login_url":"https://manage.meetupcall.com/login/f2AykXcRwuM"
-  }
-]
+  "data": [
+    {
+      "email": "john.smith@gmail.com",
+      "login_url": "https://manage.meetupcall.com/login/j9SHCvwBfRk"
+    },
+    {
+      "email": "johnny.appleseed@outlook.com",
+      "login_url": "https://manage.meetupcall.com/login/YYEyH8TL2v8"
+    },
+    {
+      "email": "jane.doe@hotmail.com",
+      "login_url": "https://manage.meetupcall.com/login/aQS0Wmegmqs"
+    }
+  ]
+}
 ```
 
 This endpoint retrieves a collection of the email addresses and login_urls of all Signups previously created through the API with your key.
@@ -176,8 +215,12 @@ This endpoint retrieves a collection of the email addresses and login_urls of al
 
 ## Get a Specific Signup
 
-```ruby
+```csharp
+client = SignupClient.new("pretend_api_key")
+client.Get("john.smith@gmail.com");
+```
 
+```ruby
 client = SignupClient.new('pretend_api_key')
 client.get('john.smith@gmail.com')
 ```
@@ -190,8 +233,14 @@ curl https://manage.meetupcall.com/api/v1/signups/john.smith@gmail.com -H "x-api
 
 ```json
 {
-  "success": true,
-  "login_url":"https://manage.meetupcall.com/login/TCL6LGVJHZc"
+  "status": {
+    "code": 200,
+    "description": "Success."
+  },
+  "data": {
+    "email": "john.smith@gmail.com",
+    "login_url": "https://manage.meetupcall.com/login/A45G3cLe-to"
+  }
 }
 ```
 
