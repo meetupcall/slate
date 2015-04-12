@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["shell","ruby"]);
+          setupLanguages(["shell","ruby","csharp"]);
         });
       </script>
   </head>
@@ -30,6 +30,7 @@
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
               <a href="#" data-language-name="ruby">ruby</a>
+              <a href="#" data-language-name="csharp">csharp</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -73,6 +74,10 @@
   <span class="k">end</span>
 <span class="k">end</span>
 </code></pre>
+<pre><code class="highlight csharp">
+<span class="c1">// C#, VB.NET or other .NET clients can use our client library available at https://github.com/meetupcall/meetupcall-api-dotnet
+</span>
+</code></pre>
 
 <p>Welcome to alpha version Meetupcall V1 API. You can use our API to access Meetupcall API endpoints, which are currently limited to automating the customer sign-up process.</p>
 
@@ -85,6 +90,8 @@
 <blockquote>
 <p>To authenticate, use this code:</p>
 </blockquote>
+<pre><code class="highlight csharp"><span class="n">var</span> <span class="n">client</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SignupClient</span><span class="p">(</span><span class="s">"pretend_api_key"</span><span class="p">);</span>
+</code></pre>
 <pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 </code></pre>
 <pre><code class="highlight shell"><span class="c"># With Curl, you can just pass the correct header with each request</span>
@@ -109,6 +116,19 @@ You must replace `pretend_api_key` with your personal API key.
 <h1 id="signups">Signups</h1>
 
 <h2 id="create-a-signup">Create a Signup</h2>
+<pre><code class="highlight csharp"><span class="n">var</span> <span class="n">request</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SignupRequest</span> <span class="p">{</span>
+  <span class="n">email</span> <span class="p">=</span> <span class="s">"john.smith@gmail.com"</span><span class="p">,</span>
+  <span class="n">first_name</span> <span class="p">=</span> <span class="s">"John"</span><span class="p">,</span>
+  <span class="n">last_name</span> <span class="p">=</span> <span class="s">"Smith"</span><span class="p">,</span>
+  <span class="n">account_name</span> <span class="p">=</span> <span class="s">"Acme Corp"</span><span class="p">,</span>
+  <span class="n">billing_street</span> <span class="p">=</span> <span class="s">"29 Acacia Road"</span><span class="p">,</span>
+  <span class="n">billing_city</span> <span class="p">=</span> <span class="s">"London"</span><span class="p">,</span>
+  <span class="n">billing_postal_code</span> <span class="p">=</span> <span class="s">"SW19 5AG"</span><span class="p">,</span>
+  <span class="n">billing_country</span> <span class="p">=</span> <span class="s">"GB"</span>
+<span class="p">};</span>
+
+<span class="n">var</span> <span class="n">new_signup</span> <span class="p">=</span> <span class="n">client</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">request</span><span class="p">);</span>
+</code></pre>
 <pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 
 <span class="n">client</span><span class="p">.</span><span class="nf">create</span><span class="p">({</span>
@@ -128,8 +148,14 @@ You must replace `pretend_api_key` with your personal API key.
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre><code class="highlight json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/TCL6LGVJHZc"</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.smith@gmail.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"login_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://manage.meetupcall.com/login/g45G3fLe-to"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
@@ -208,6 +234,9 @@ You must replace `pretend_api_key` with your personal API key.
 </tbody></table>
 
 <h2 id="get-all-signups">Get all Signups</h2>
+<pre><code class="highlight csharp"><span class="n">client</span> <span class="p">=</span> <span class="n">SignupClient</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="s">"pretend_api_key"</span><span class="p">)</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">Index</span><span class="p">();</span>
+</code></pre>
 <pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 <span class="n">client</span><span class="p">.</span><span class="nf">index</span>
 </code></pre>
@@ -218,24 +247,26 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
 <blockquote>
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
-<pre><code class="highlight json"><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">  
-     </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"john.smith@gmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/ACL6LGVJHZc"</span><span class="w">
+<pre><code class="highlight json"><span class="p">{</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success."</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">  
-     </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"johnny.appleseed@gmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/6rXvEY6wVbU"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">  
-     </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"bob.jones@outlook.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/MgsrsRZtQeQ"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">  
-     </span><span class="s2">"email"</span><span class="p">:</span><span class="s2">"jane.doe@hotmail.com"</span><span class="p">,</span><span class="w">
-     </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/f2AykXcRwuM"</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.smith@gmail.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"login_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://manage.meetupcall.com/login/j9SHCvwBfRk"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"johnny.appleseed@outlook.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"login_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://manage.meetupcall.com/login/YYEyH8TL2v8"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"jane.doe@hotmail.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"login_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://manage.meetupcall.com/login/aQS0Wmegmqs"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre>
 
 <p>This endpoint retrieves a collection of the email addresses and login_urls of all Signups previously created through the API with your key.</p>
@@ -245,8 +276,10 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
 <p><code class="prettyprint">GET https://manage.meetupcall.com/api/v1/signups</code></p>
 
 <h2 id="get-a-specific-signup">Get a Specific Signup</h2>
-<pre><code class="highlight ruby">
-<span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
+<pre><code class="highlight csharp"><span class="n">client</span> <span class="p">=</span> <span class="n">SignupClient</span><span class="p">.</span><span class="k">new</span><span class="p">(</span><span class="s">"pretend_api_key"</span><span class="p">)</span>
+<span class="n">client</span><span class="p">.</span><span class="nf">Get</span><span class="p">(</span><span class="s">"john.smith@gmail.com"</span><span class="p">);</span>
+</code></pre>
+<pre><code class="highlight ruby"><span class="n">client</span> <span class="o">=</span> <span class="no">SignupClient</span><span class="p">.</span><span class="nf">new</span><span class="p">(</span><span class="s1">'pretend_api_key'</span><span class="p">)</span>
 <span class="n">client</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="s1">'john.smith@gmail.com'</span><span class="p">)</span>
 </code></pre>
 <pre><code class="highlight shell">curl https://manage.meetupcall.com/api/v1/signups/john.smith@gmail.com -H <span class="s2">"x-api-key: pretend_api_key"</span>  -H <span class="s2">"Accept:application/json"</span>
@@ -256,8 +289,14 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
 <p>The above command returns JSON structured like this:</p>
 </blockquote>
 <pre><code class="highlight json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"login_url"</span><span class="p">:</span><span class="s2">"https://manage.meetupcall.com/login/TCL6LGVJHZc"</span><span class="w">
+  </span><span class="s2">"status"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Success."</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.smith@gmail.com"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"login_url"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://manage.meetupcall.com/login/A45G3cLe-to"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 
@@ -324,6 +363,7 @@ curl https://manage.meetupcall.com/api/v1/signups -H <span class="s2">"x-api-key
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
                 <a href="#" data-language-name="ruby">ruby</a>
+                <a href="#" data-language-name="csharp">csharp</a>
           </div>
       </div>
     </div>
